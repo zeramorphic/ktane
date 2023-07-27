@@ -13,6 +13,18 @@ def main(): Unit = {
   println("loading done")
 
   val interactions = Interactions(GraphicsEnvironment.getLocalGraphicsEnvironment.getScreenDevices()(0))
+  val dimensions = BombDimensions(2, 3)
+
+  // interactions.pickUpBomb()
+
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
+
+  val moduleLocations = DetectModules.detect(interactions, dimensions)
+  println(moduleLocations)
+
+  // interactions.screenshotAllModules(moduleLocations, dimensions)
+
+  val moduleTypes = moduleLocations.iterator
+    .map(location => CategoriseModule.categorise(interactions, location, dimensions))
 }

@@ -1,15 +1,11 @@
 package com.zeramorphic.ktane
 
-class Edgework(batteriesD: Int,
-               batteriesAA: Int,
-               lit: List[Indicator],
-               unlit: List[Indicator],
-               plates: List[List[Port]],
-               serial: String):
-
-  def batteries: Int = batteriesD + batteriesAA * 2
-
-  def batteryHolders: Int = batteriesD + batteriesAA
+case class Edgework(batteriesD: Int,
+                    batteriesAA: Int,
+                    lit: List[Indicator],
+                    unlit: List[Indicator],
+                    plates: List[List[Port]],
+                    serial: String):
 
   override def toString: String = {
     val sb = StringBuilder()
@@ -25,3 +21,7 @@ class Edgework(batteriesD: Int,
     sb.append("serial # ").append(serial)
     sb.toString
   }
+
+  def batteries: Int = batteriesD + batteriesAA * 2
+
+  def batteryHolders: Int = batteriesD + batteriesAA
