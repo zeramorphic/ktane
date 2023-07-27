@@ -28,6 +28,11 @@ class Interactions(screen: GraphicsDevice):
     screenshot(Rect(835, 375, 285, 285))
   }
 
+  def screenshotOnModule(rect: Rect): Mat = {
+    moveAway()
+    screenshot(Rect(835 + rect.x, 375 + rect.y, rect.width, rect.height))
+  }
+
   def screenshot(rect: Rect): Mat =
     ImageConversion.bufferedImageToMat(robot.createScreenCapture(Rectangle(
       screen.getDefaultConfiguration.getBounds.x + rect.x, screen.getDefaultConfiguration.getBounds.y + rect.y,
@@ -36,11 +41,11 @@ class Interactions(screen: GraphicsDevice):
   /**
    * Moves the mouse out of the way.
    */
-  def moveAway(): Unit = move(Point(960, 950))
+  def moveAway(): Unit = moveOnScreen(Point(960, 950))
 
   def selectModule(location: ModuleLocation, dimensions: BombDimensions): Unit = {
     if reversed != location.reverse then flipBomb()
-    press(dimensions.position(location))
+    pressOnScreen(dimensions.position(location))
     Thread.sleep(500)
   }
 
@@ -49,10 +54,10 @@ class Interactions(screen: GraphicsDevice):
    * Assumes that the bomb is selected, but no module is selected.
    */
   def flipBomb(): Unit = {
-    move(Point(880, 540))
+    moveOnScreen(Point(880, 540))
     robot.mousePress(InputEvent.BUTTON3_DOWN_MASK)
     Thread.sleep(100)
-    move(Point(320, 540))
+    moveOnScreen(Point(320, 540))
     robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK)
     Thread.sleep(100)
     deselect()
@@ -64,27 +69,34 @@ class Interactions(screen: GraphicsDevice):
     reversed = !reversed
   }
 
-  def move(point: Point): Unit =
-    robot.mouseMove(screen.getDefaultConfiguration.getBounds.x + point.x.toInt,
-      screen.getDefaultConfiguration.getBounds.y + point.y.toInt)
-
   def pickUpBomb(): Unit = {
-    press(Point(960, 600))
+    pressOnScreen(Point(960, 600))
     Thread.sleep(500)
   }
 
-  def press(point: Point): Unit = {
-    move(point)
-    press()
+  def pressOnScreen(point: Point): Unit = {
+    moveOnScreen(point)
+    pressOnScreen()
   }
 
-  def press(): Unit = {
+  def pressOnScreen(): Unit = {
     robot.mousePress(InputEvent.BUTTON1_DOWN_MASK)
     robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
   }
+
+  def moveOnScreen(point: Point): Unit =
+    robot.mouseMove(screen.getDefaultConfiguration.getBounds.x + point.x.toInt,
+      screen.getDefaultConfiguration.getBounds.y + point.y.toInt)
 
   def deselect(): Unit = {
     robot.mousePress(InputEvent.BUTTON3_DOWN_MASK)
     robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK)
     Thread.sleep(300)
+  }
+
+  /**
+   * Presses the given point relative to the currently selected module.
+   */
+  def pressOnModule(point: Point): Unit = {
+    pressOnScreen(Point(835 + point.x, 375 + point.y))
   }

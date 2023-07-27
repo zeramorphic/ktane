@@ -1,7 +1,7 @@
 package com.zeramorphic.ktane
 
 object CategoriseModule:
-  def categorise(interactions: Interactions, location: ModuleLocation, dimensions: BombDimensions): Unit = {
+  def categorise(interactions: Interactions, location: ModuleLocation, dimensions: BombDimensions): String = {
     interactions.selectModule(location, dimensions)
     val screenshot = interactions.screenshotSelectedModule()
     interactions.deselect()
@@ -41,8 +41,14 @@ object CategoriseModule:
       .toList
 
     options.length match {
-      case 0 => println("could not determine module")
-      case 1 => println("detected " + options.head._1)
-      case _ => println("ambiguous: " + options)
+      case 0 =>
+        println("could not determine module")
+        "unknown"
+      case 1 =>
+        println("detected " + options.head._1)
+        options.head._1
+      case _ =>
+        println("ambiguous: " + options)
+        "ambiguous"
     }
   }

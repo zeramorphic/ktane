@@ -4,6 +4,12 @@ import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 
 object MatchTemplate:
+  def occurrences(image: Mat, template: Mat, threshold: Double): Array[Point] =
+    occurrences(image, template, threshold, 30)
+
+  def occurrences(image: Mat, template: Mat): Array[Point] =
+    occurrences(image, template, 0.5, 30)
+
   def occurrences(image: Mat, template: Mat, threshold: Double, no_confusion: Int): Array[Point] = {
     // Match the image against the template.
     val out = Mat(0, 0, CvType.CV_32F)
@@ -38,8 +44,17 @@ object MatchTemplate:
       .toArray
   }
 
-  def occurrences(image: Mat, template: Mat, threshold: Double): Array[Point] =
-    occurrences(image, template, threshold, 30)
-
-  def occurrences(image: Mat, template: Mat): Array[Point] =
-    occurrences(image, template, 0.5, 30)
+  /**
+   * Returns the value associated to the template that best matched the image,
+   * along with the correlation value.
+   */
+  def bestMatch[T](image: Mat, templates: Iterator[(Mat, T)]): (Double, T) = {
+    val (template, value, minMaxLoc) = templates
+      .map((template, value) => {
+        val out = Mat()
+        Imgproc.matchTemplate(image, template, out, Imgproc.TM_CCOEFF_NORMED)
+        (template, value, Core.minMaxLoc(out))
+      })
+      .maxBy((_, _, minMaxLoc) => minMaxLoc.maxVal)
+    (minMaxLoc.maxVal, value)
+  }

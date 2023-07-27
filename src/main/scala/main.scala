@@ -1,5 +1,6 @@
 package com.zeramorphic.ktane
 
+import modules.*
 import org.opencv.core.Core
 
 import java.awt.GraphicsEnvironment
@@ -17,7 +18,9 @@ def main(): Unit = {
 
   // interactions.pickUpBomb()
 
-  val edgework = ReadEdgework.read(interactions)
+  Password(interactions).solve()
+
+  /* val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
   val moduleLocations = DetectModules.detect(interactions, dimensions)
@@ -27,4 +30,15 @@ def main(): Unit = {
 
   val moduleTypes = moduleLocations.iterator
     .map(location => CategoriseModule.categorise(interactions, location, dimensions))
+    .toList
+
+  for (location, ty) <- moduleLocations.iterator.zip(moduleTypes) do {
+    ty match {
+      case "password" =>
+        interactions.selectModule(location, dimensions)
+        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "password")
+        Password(interactions).solve()
+      case _ => println("do not know how to solve " + ty)
+    }
+  } */
 }

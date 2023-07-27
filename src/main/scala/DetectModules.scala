@@ -19,10 +19,10 @@ object DetectModules:
   private def hasModuleAt(interactions: Interactions, point: Point): Boolean = {
     // Pressing will also focus the window.
     interactions.moveAway()
-    interactions.press()
+    interactions.pressOnScreen()
     Thread.sleep(100)
     val before = interactions.screenshot(Rect(100, 100, 1920 - 100, 1080 - 100))
-    interactions.move(point)
+    interactions.moveOnScreen(point)
     Thread.sleep(100)
     val after = interactions.screenshot(Rect(100, 100, 1920 - 100, 1080 - 100))
 
