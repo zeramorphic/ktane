@@ -5,29 +5,29 @@ import org.opencv.core.*
 
 import scala.collection.mutable.ArrayBuffer
 
-class ReadEdgework(interactions: Interactions):
-  private val screenshot: Mat = interactions.screenshot(Rect(0, 9, 1605, 68))
-  ImageConversion.writeToFile(screenshot, "edgework")
+object ReadEdgework:
+  def read(interactions: Interactions): Edgework = {
+    val screenshot: Mat = interactions.screenshot(Rect(0, 9, 1605, 68))
+    ImageConversion.writeToFile(screenshot, "edgework")
 
-  def read(): Unit = {
     val tesseract = Tesseract()
-    tesseract.setDatapath("tessdata")
+    tesseract.setDatapath("tessdata_best")
     tesseract.setLanguage("eng")
+    // Treat the image as a single word.
+    tesseract.setPageSegMode(8)
 
     val batteriesD = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.BatteryD).length
     val batteriesAA = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.BatteryAA).length
 
-    val lit = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.IndicatorLit, 0.7)
+    val lit = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.IndicatorLit, 0.8)
       .map(indicator => Indicator.fromString(tesseract.doOCR(ImageConversion.matToBufferedImage(screenshot.submat(
         indicator.y.toInt + 5, indicator.y.toInt + 37,
-        indicator.x.toInt + 53, indicator.x.toInt + 120))).trim)
-      )
+        indicator.x.toInt + 53, indicator.x.toInt + 120))).trim))
 
-    val unlit = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.IndicatorUnlit, 0.7)
+    val unlit = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.IndicatorUnlit, 0.6)
       .map(indicator => Indicator.fromString(tesseract.doOCR(ImageConversion.matToBufferedImage(screenshot.submat(
         indicator.y.toInt + 5, indicator.y.toInt + 37,
-        indicator.x.toInt + 53, indicator.x.toInt + 120))).trim)
-      )
+        indicator.x.toInt + 53, indicator.x.toInt + 120))).trim))
 
     val plateLeft = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.PlateLeft, 0.9)
     val plateRight = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.PlateRight, 0.9)
@@ -56,14 +56,13 @@ class ReadEdgework(interactions: Interactions):
     }
 
     val serialNumber = MatchTemplate.occurrences(screenshot, ReadEdgeworkSymbols.SerialNumber)
-    if serialNumber.length == 1 then {
-      val submat = screenshot.submat(
-        serialNumber(0).y.toInt + 30, serialNumber(0).y.toInt + 65,
-        serialNumber(0).x.toInt - 15, serialNumber(0).x.toInt + 120)
-      val ocr = tesseract.doOCR(ImageConversion.matToBufferedImage(submat)).trim
-      ImageConversion.writeToFile(submat, "submatrix")
+    if serialNumber.length != 1 then
+      throw Exception("expected exactly one serial number: " + serialNumber.mkString("Array(", ", ", ")"))
 
-      val edgework = Edgework(batteriesD, batteriesAA, lit.toList, unlit.toList, plates.map(buf => buf.toList), ocr)
-      println(edgework)
-    }
+    val submat = screenshot.submat(
+      serialNumber(0).y.toInt + 30, serialNumber(0).y.toInt + 65,
+      serialNumber(0).x.toInt - 15, serialNumber(0).x.toInt + 120)
+    val ocr = tesseract.doOCR(ImageConversion.matToBufferedImage(submat)).trim
+
+    Edgework(batteriesD, batteriesAA, lit.toList, unlit.toList, plates.map(buf => buf.toList), ocr)
   }

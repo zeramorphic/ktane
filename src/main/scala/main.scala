@@ -13,6 +13,6 @@ def main(): Unit = {
   println("loading done")
 
   val interactions = Interactions(GraphicsEnvironment.getLocalGraphicsEnvironment.getScreenDevices()(0))
-  val readEdgework = ReadEdgework(interactions)
-  readEdgework.read()
+  val edgework = ReadEdgework.read(interactions)
+  println(edgework)
 }
