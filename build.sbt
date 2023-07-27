@@ -8,4 +8,8 @@ lazy val root = (project in file("."))
     idePackagePrefix := Some("com.zeramorphic.ktane")
   )
 
+libraryDependencies ++= Seq(
+  "net.sourceforge.tess4j" % "tess4j" % "5.7.0"
+)
+
 Compile / unmanagedJars += file("lib/opencv-480.jar")
