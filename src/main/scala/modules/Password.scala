@@ -6,8 +6,7 @@ import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 
 class Password(interactions: Interactions):
-  def solve(): Unit =
-  {
+  def solve(): Unit = {
     val spinners = (0 to 4).map(_ => (0 to 5).map(_ => '?').toArray).toArray
 
     for i <- 0 to 5 do {
@@ -40,7 +39,7 @@ class Password(interactions: Interactions):
     val word = words.find(word => word.indices.forall(i => spinners(i).contains(word(i))))
     word match {
       case None => println("could not find word")
-      case Some(word) => {
+      case Some(word) =>
         println("word was " + word)
         for i <- 0 to 4 do {
           spinners(i).indexOf(word(i)) match {
@@ -53,7 +52,6 @@ class Password(interactions: Interactions):
           }
         }
         interactions.pressOnModule(Point(150, 250))
-      }
     }
   }
 

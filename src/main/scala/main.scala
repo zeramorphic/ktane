@@ -18,9 +18,9 @@ def main(): Unit = {
 
   // interactions.pickUpBomb()
 
-  Password(interactions).solve()
+//  Memory(interactions).solve()
 
-  /* val edgework = ReadEdgework.read(interactions)
+  val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
   val moduleLocations = DetectModules.detect(interactions, dimensions)
@@ -34,11 +34,19 @@ def main(): Unit = {
 
   for (location, ty) <- moduleLocations.iterator.zip(moduleTypes) do {
     ty match {
+      case "memory" =>
+        interactions.selectModule(location, dimensions)
+        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "memory")
+        Memory(interactions).solve()
+        interactions.deselect()
       case "password" =>
         interactions.selectModule(location, dimensions)
         ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "password")
         Password(interactions).solve()
+        interactions.deselect()
       case _ => println("do not know how to solve " + ty)
     }
-  } */
+
+    Thread.sleep(100)
+  }
 }

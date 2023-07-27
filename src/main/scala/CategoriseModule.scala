@@ -38,6 +38,8 @@ object CategoriseModule:
     val options = modules.filter((name, templates) =>
         templates.forall((template, threshold) =>
           MatchTemplate.occurrences(screenshot, template, threshold).nonEmpty))
+      .map((name, templates) => name)
+      .distinct
       .toList
 
     options.length match {
@@ -45,8 +47,8 @@ object CategoriseModule:
         println("could not determine module")
         "unknown"
       case 1 =>
-        println("detected " + options.head._1)
-        options.head._1
+        println("detected " + options.head)
+        options.head
       case _ =>
         println("ambiguous: " + options)
         "ambiguous"
