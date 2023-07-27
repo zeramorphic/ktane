@@ -9,6 +9,7 @@ object CategoriseModule:
     val modules = Seq(
       ("button", Seq((CategoriseTemplates.Button, 0.9))),
       ("complicated_wires", Seq((CategoriseTemplates.ComplicatedWires, 0.9))),
+      ("keypad", Seq((CategoriseTemplates.Keypad, 0.9))),
       ("maze", Seq((CategoriseTemplates.Maze, 0.9))),
       ("memory", Seq(
         (CategoriseTemplates.MemoryLeft, 0.9),
@@ -20,7 +21,6 @@ object CategoriseModule:
       ("simon_says", Seq((CategoriseTemplates.SimonSays2, 0.9))),
       ("simon_says", Seq((CategoriseTemplates.SimonSays3, 0.9))),
       ("simon_says", Seq((CategoriseTemplates.SimonSays4, 0.9))),
-      ("symbols", Seq((CategoriseTemplates.Symbols, 0.9))),
       ("whos_on_first", Seq(
         (CategoriseTemplates.WhosOnFirstDisplay, 0.9),
         (CategoriseTemplates.WhosOnFirstProgress, 0.9)

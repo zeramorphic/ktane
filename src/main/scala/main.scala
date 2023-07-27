@@ -1,6 +1,7 @@
 package com.zeramorphic.ktane
 
 import modules.*
+
 import org.opencv.core.Core
 
 import java.awt.GraphicsEnvironment
@@ -18,14 +19,12 @@ def main(): Unit = {
 
   // interactions.pickUpBomb()
 
-//  Memory(interactions).solve()
+  //  Keypad(interactions).solve()
 
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
   val moduleLocations = DetectModules.detect(interactions, dimensions)
-  println(moduleLocations)
-
   // interactions.screenshotAllModules(moduleLocations, dimensions)
 
   val moduleTypes = moduleLocations.iterator
@@ -34,6 +33,11 @@ def main(): Unit = {
 
   for (location, ty) <- moduleLocations.iterator.zip(moduleTypes) do {
     ty match {
+      case "keypad" =>
+        interactions.selectModule(location, dimensions)
+        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "keypad")
+        Keypad(interactions).solve()
+        interactions.deselect()
       case "memory" =>
         interactions.selectModule(location, dimensions)
         ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "memory")
