@@ -32,7 +32,7 @@ def main(): Unit = {
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
-//  modules.ComplicatedWires(interactions, edgework).solve()
+//  modules.Morse(interactions).solve()
 //  return
 
 //  val module = modules.WhosOnFirst(interactions)
