@@ -1,9 +1,11 @@
 package com.zeramorphic.ktane
 
+import com.github.kwhat.jnativehook.GlobalScreen
+import com.github.kwhat.jnativehook.keyboard.{NativeKeyEvent, NativeKeyListener}
 import org.opencv.core.Core
 
 import java.awt.GraphicsEnvironment
-import java.time.Instant
+import java.time.{Duration, Instant}
 
 @main
 def main(): Unit = {
@@ -12,6 +14,15 @@ def main(): Unit = {
   System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
   System.loadLibrary("opencv_java480")
   println("loading done")
+
+  // One can press `Shift+Q` to immediately exit the program with code 2.
+  GlobalScreen.registerNativeHook();
+  GlobalScreen.addNativeKeyListener(new NativeKeyListener {
+    override def nativeKeyTyped(nativeEvent: NativeKeyEvent): Unit = {
+      // Forced quit by user.
+      if nativeEvent.getKeyChar == 'Q' then System.exit(2)
+    }
+  })
 
   val interactions = Interactions(GraphicsEnvironment.getLocalGraphicsEnvironment.getScreenDevices()(0))
   val dimensions = BombDimensions(2, 3)
@@ -23,7 +34,11 @@ def main(): Unit = {
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
-//  modules.ComplicatedWires(interactions, edgework).solve()
+//  val module = modules.WhosOnFirst(interactions)
+//  while !module.solved do module.attemptSolve() match {
+//    case Some(instant) => Thread.sleep(Duration.between(Instant.now, instant).toMillis)
+//    case None =>
+//  }
 
   val moduleLocations = DetectModules.detect(interactions, dimensions)
   // interactions.screenshotAllModules(moduleLocations, dimensions)
@@ -69,4 +84,7 @@ def main(): Unit = {
     // In the `None` case, this stops us going into a spin loop.
     Thread.sleep(50)
   }
+
+  // The native key listener is still running, so we must kill it here.
+  System.exit(0)
 }

@@ -27,8 +27,8 @@ object ImageConversion:
       Core.multiply(matrix, Scalar(255.0), outScaled)
       val outU8 = Mat(0, 0, CvType.CV_8UC1)
       outScaled.convertTo(outU8, CvType.CV_8UC1)
-      ImageIO.write(ImageConversion.matToBufferedImage(outU8), "bmp", new File(name + ".bmp"))
+      ImageIO.write(ImageConversion.matToBufferedImage(outU8), "png", new File(name + ".png"))
     } else {
-      ImageIO.write(ImageConversion.matToBufferedImage(matrix), "bmp", new File(name + ".bmp"))
+      ImageIO.write(ImageConversion.matToBufferedImage(matrix), "png", new File(name + ".png"))
     }
   }

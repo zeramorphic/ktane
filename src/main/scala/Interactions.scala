@@ -33,11 +33,13 @@ class Interactions(screen: GraphicsDevice):
 
   def screenshotSelectedModule(): Mat = {
     moveAway()
+    Thread.sleep(100)
     screenshot(Rect(835, 375, 285, 285))
   }
 
   def screenshotOnModule(rect: Rect): Mat = {
     moveAway()
+    Thread.sleep(100)
     screenshot(Rect(835 + rect.x, 375 + rect.y, rect.width, rect.height))
   }
 

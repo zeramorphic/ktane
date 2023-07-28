@@ -9,7 +9,8 @@ lazy val root = (project in file("."))
   )
 
 libraryDependencies ++= Seq(
-  "net.sourceforge.tess4j" % "tess4j" % "5.7.0"
+  "net.sourceforge.tess4j" % "tess4j" % "5.7.0",
+  "com.github.kwhat" % "jnativehook" % "2.2.2",
 )
 
 Compile / unmanagedJars += file("lib/opencv-480.jar")

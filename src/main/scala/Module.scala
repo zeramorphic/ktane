@@ -47,6 +47,7 @@ object Module:
       case "maze" => Maze(interactions)
       case "memory" => Memory(interactions)
       case "password" => Password(interactions)
+      case "whos_on_first" => WhosOnFirst(interactions)
       case "wires" => Wires(interactions, edgework)
       case _ => null
     }

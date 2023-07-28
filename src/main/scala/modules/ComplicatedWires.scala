@@ -50,6 +50,8 @@ class ComplicatedWires(interactions: Interactions, edgework: Edgework) extends O
       .map(i => Core.minMaxLoc(starsSubmat.submat(Rect(40 * i, 0, 10, 10))).minVal < 100)
       .toList
 
+    print(red)
+
     for i <- 0 to 5 do {
       val cut = (red(i), blue(i), led(i), star(i)) match {
         case (false, false, false, false) |
@@ -72,7 +74,7 @@ class ComplicatedWires(interactions: Interactions, edgework: Edgework) extends O
 
       if cut then {
         interactions.pressOnModule(Point(40 + 37 * i, 200))
-        Thread.sleep(100)
+        Thread.sleep(200)
       }
     }
   }
