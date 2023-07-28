@@ -16,7 +16,7 @@ def main(): Unit = {
   println("loading done")
 
   // One can press `Shift+Q` to immediately exit the program with code 2.
-  GlobalScreen.registerNativeHook();
+  GlobalScreen.registerNativeHook()
   GlobalScreen.addNativeKeyListener(new NativeKeyListener {
     override def nativeKeyTyped(nativeEvent: NativeKeyEvent): Unit = {
       // Forced quit by user.
@@ -29,10 +29,11 @@ def main(): Unit = {
 
   // interactions.pickUpBomb()
 
-  // Maze(interactions).solve()
-
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
+
+//  modules.ComplicatedWires(interactions, edgework).solve()
+//  return
 
 //  val module = modules.WhosOnFirst(interactions)
 //  while !module.solved do module.attemptSolve() match {

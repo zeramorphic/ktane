@@ -99,6 +99,8 @@ class Interactions(screen: GraphicsDevice):
     robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
   }
 
+  def moveOnModule(point: Point): Unit = moveOnScreen(Point(835 + point.x, 375 + point.y))
+
   def moveOnScreen(point: Point): Unit =
     robot.mouseMove(screen.getDefaultConfiguration.getBounds.x + point.x.toInt,
       screen.getDefaultConfiguration.getBounds.y + point.y.toInt)
@@ -114,6 +116,8 @@ class Interactions(screen: GraphicsDevice):
   /**
    * Presses the given point relative to the currently selected module.
    */
-  def pressOnModule(point: Point): Unit = {
-    pressOnScreen(Point(835 + point.x, 375 + point.y))
-  }
+  def pressOnModule(point: Point): Unit = pressOnScreen(Point(835 + point.x, 375 + point.y))
+
+  def mouseDown(): Unit = robot.mousePress(InputEvent.BUTTON1_DOWN_MASK)
+
+  def mouseUp(): Unit = robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)

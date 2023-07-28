@@ -17,10 +17,9 @@ class WhosOnFirst(interactions: Interactions) extends Module:
    * This allows us to solve this module while others are also being solved.
    */
   override def priority: Int = 100
-  
+
   override def attemptSolve(): Option[Instant] = {
     val screenshot = interactions.screenshotSelectedModule()
-    ImageConversion.writeToFile(screenshot, s"whos_on_first$solvedStages")
 
     val display = screenshot.submat(Rect(52, 40, 110, 30))
     val displayWord = MatchTemplate.bestMatch(display, WhosOnFirst.Displays.iterator)._2
@@ -38,10 +37,10 @@ class WhosOnFirst(interactions: Interactions) extends Module:
       .toList
 
     val keyword = displayWord match {
-      case "UR" => words(0)(0)
-      case "YES" | "NOTHING" | "LED" | "THEY ARE" => words(0)(1)
-      case "" | "REED" | "LEED" | "THEY'RE" => words(0)(2)
-      case "FIRST" | "OKAY" | "C" => words(1)(0)
+      case "UR" => words.head.head
+      case "YES" | "NOTHING" | "LED" | "THEY ARE" => words.head(1)
+      case "" | "REED" | "LEED" | "THEY'RE" => words.head(2)
+      case "FIRST" | "OKAY" | "C" => words(1).head
       case "BLANK" | "READ" | "RED" | "YOU" | "YOUR" | "YOU'RE" | "THEIR" => words(1)(1)
       case "DISPLAY" | "SAYS" | "NO" | "LEAD" | "HOLD ON" | "YOU ARE" | "THERE" | "SEE" | "CEE" => words(1)(2)
     }

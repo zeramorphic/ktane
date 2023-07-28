@@ -8,7 +8,6 @@ import scala.collection.mutable.ArrayBuffer
 object ReadEdgework:
   def read(interactions: Interactions): Edgework = {
     val screenshot: Mat = interactions.screenshot(Rect(0, 9, 1605, 68))
-    ImageConversion.writeToFile(screenshot, "edgework")
 
     val tesseract = Tesseract()
     tesseract.setDatapath("tessdata_best")
@@ -42,7 +41,7 @@ object ReadEdgework:
     val plates = plateLeft.map(_ => ArrayBuffer[Port]()).toList
     val possiblePorts = Seq(
       (Port.Dvi, ReadEdgeworkTemplates.PortDvi, 0.5),
-      (Port.Parallel, ReadEdgeworkTemplates.PortParallel, 0.5),
+      (Port.Parallel, ReadEdgeworkTemplates.PortParallel, 0.3),
       (Port.Ps2, ReadEdgeworkTemplates.PortPs2, 0.5),
       (Port.Rca, ReadEdgeworkTemplates.PortRca, 0.8),
       (Port.Rj45, ReadEdgeworkTemplates.PortRj45, 0.8),

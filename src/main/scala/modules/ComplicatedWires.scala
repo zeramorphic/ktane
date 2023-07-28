@@ -20,17 +20,19 @@ class ComplicatedWires(interactions: Interactions, edgework: Edgework) extends O
     val redChannel = Mat()
     Core.extractChannel(wires, redChannel, 2)
     Core.bitwise_and(redChannel, wiresSat, redChannel)
+    Imgproc.medianBlur(redChannel, redChannel, 3)
 
     val blueChannel = Mat()
     Core.extractChannel(wires, blueChannel, 0)
     Core.bitwise_and(blueChannel, wiresSat, blueChannel)
+    Imgproc.medianBlur(blueChannel, blueChannel, 3)
 
     val red = (0 to 5)
       .map(i => Core.minMaxLoc(redChannel.submat(Rect(35 * i, 0, 32, 20))).maxVal > 150)
       .toList
 
     val blue = (0 to 5)
-      .map(i => Core.minMaxLoc(blueChannel.submat(Rect(35 * i, 0, 32, 20))).maxVal > 150)
+      .map(i => Core.minMaxLoc(blueChannel.submat(Rect(35 * i, 0, 32, 20))).maxVal > 128)
       .toList
 
     // Determine the presence of LEDs.
@@ -49,8 +51,6 @@ class ComplicatedWires(interactions: Interactions, edgework: Edgework) extends O
     val star = (0 to 5)
       .map(i => Core.minMaxLoc(starsSubmat.submat(Rect(40 * i, 0, 10, 10))).minVal < 100)
       .toList
-
-    print(red)
 
     for i <- 0 to 5 do {
       val cut = (red(i), blue(i), led(i), star(i)) match {
