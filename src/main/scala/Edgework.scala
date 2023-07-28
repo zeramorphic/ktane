@@ -25,3 +25,5 @@ case class Edgework(batteriesD: Int,
   def batteries: Int = batteriesD + batteriesAA * 2
 
   def batteryHolders: Int = batteriesD + batteriesAA
+
+  def lastDigit: Int = serial.findLast(char => char.isDigit).get - '0'

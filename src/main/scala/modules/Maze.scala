@@ -6,8 +6,8 @@ import org.opencv.imgproc.Imgproc
 
 import scala.collection.mutable.ArrayBuffer
 
-class Maze(interactions: Interactions):
-  def solve(): Unit = {
+class Maze(interactions: Interactions) extends OneshotModule:
+  override def solve(): Unit = {
     val maze = interactions.screenshotOnModule(Rect(48, 67, 162, 162))
 
     // Identify the green circles.

@@ -1,10 +1,9 @@
 package com.zeramorphic.ktane
 
-import modules.*
-
 import org.opencv.core.Core
 
 import java.awt.GraphicsEnvironment
+import java.time.Instant
 
 @main
 def main(): Unit = {
@@ -24,38 +23,50 @@ def main(): Unit = {
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
+  //  modules.Wires(interactions, edgework).solve()
+
   val moduleLocations = DetectModules.detect(interactions, dimensions)
   // interactions.screenshotAllModules(moduleLocations, dimensions)
 
-  val moduleTypes = moduleLocations.iterator
-    .map(location => CategoriseModule.categorise(interactions, location, dimensions))
+  val sockets = moduleLocations.iterator
+    .map(location => {
+      val name = CategoriseModule.categorise(interactions, location, dimensions)
+      Socket(location, name, interactions, edgework)
+    })
+    .filter(socket =>
+      if socket.module == null then {
+        println("do not know how to solve " + socket.name);
+        false
+      }
+      else true
+    )
     .toList
+    .sortBy(socket => -socket.module.priority)
 
-  for (location, ty) <- moduleLocations.iterator.zip(moduleTypes) do {
-    ty match {
-      case "keypad" =>
-        interactions.selectModule(location, dimensions)
-        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "keypad")
-        Keypad(interactions).solve()
-        interactions.deselect()
-      case "maze" =>
-        interactions.selectModule(location, dimensions)
-        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "maze")
-        Maze(interactions).solve()
-        interactions.deselect()
-      case "memory" =>
-        interactions.selectModule(location, dimensions)
-        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "memory")
-        Memory(interactions).solve()
-        interactions.deselect()
-      case "password" =>
-        interactions.selectModule(location, dimensions)
-        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "password")
-        Password(interactions).solve()
-        interactions.deselect()
-      case _ => println("do not know how to solve " + ty)
+  while !sockets.forall(socket => socket.module.solved) do {
+    // Try to solve one of the modules.
+    val now = Instant.now()
+    val socket = sockets
+      .filter(socket => !socket.checkNext.isAfter(now))
+      .find(socket => !socket.module.solved)
+    socket match {
+      case Some(socket) =>
+        // Try to solve this module.
+        interactions.selectModule(socket.location, dimensions)
+        socket.module.attemptSolve() match {
+          case Some(instant) => socket.checkNext = instant
+          case None =>
+        }
+      case None =>
+        // All modules are on cooldown.
+        // Select the module that will next be not on cooldown.
+        val next = sockets
+          .filter(socket => !socket.module.solved)
+          .minBy(socket => socket.checkNext)
+        interactions.selectModule(next.location, dimensions)
     }
-
-    Thread.sleep(100)
+    // Sleep for a small amount afterwards to make sure all clicks actually register.
+    // In the `None` case, this stops us going into a spin loop.
+    Thread.sleep(50)
   }
 }

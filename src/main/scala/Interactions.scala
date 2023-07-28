@@ -9,7 +9,15 @@ class Interactions(screen: GraphicsDevice):
   private val robot: Robot = Robot()
   println(s"using screen $screen")
 
+  /**
+   * True if the bomb is currently reversed.
+   */
   private var reversed: Boolean = false
+
+  /**
+   * The location of a module if one is currently selected.
+   */
+  private var moduleSelected: Option[ModuleLocation] = None
 
   /**
    * Saves screenshots of all modules with listed locations.
@@ -44,9 +52,14 @@ class Interactions(screen: GraphicsDevice):
   def moveAway(): Unit = moveOnScreen(Point(960, 950))
 
   def selectModule(location: ModuleLocation, dimensions: BombDimensions): Unit = {
+    if moduleSelected.nonEmpty then {
+      if moduleSelected.get == location then return else deselect()
+    }
     if reversed != location.reverse then flipBomb()
     pressOnScreen(dimensions.position(location))
     Thread.sleep(500)
+
+    moduleSelected = Some(location)
   }
 
   /**
@@ -92,6 +105,8 @@ class Interactions(screen: GraphicsDevice):
     robot.mousePress(InputEvent.BUTTON3_DOWN_MASK)
     robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK)
     Thread.sleep(300)
+
+    moduleSelected = None
   }
 
   /**

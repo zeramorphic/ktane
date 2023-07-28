@@ -5,8 +5,8 @@ import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 
-class Password(interactions: Interactions):
-  def solve(): Unit = {
+class Password(interactions: Interactions) extends OneshotModule:
+  override def solve(): Unit = {
     val spinners = (0 to 4).map(_ => (0 to 5).map(_ => '?').toArray).toArray
 
     for i <- 0 to 5 do {
@@ -52,6 +52,7 @@ class Password(interactions: Interactions):
         }
         interactions.pressOnModule(Point(150, 250))
     }
+    None
   }
 
   /**

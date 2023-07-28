@@ -6,8 +6,8 @@ import modules.Symbol.*
 import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 
-class Keypad(interactions: Interactions):
-  def solve(): Unit = {
+class Keypad(interactions: Interactions) extends OneshotModule:
+  override def solve(): Unit = {
     val screenshot = interactions.screenshotOnModule(Rect(32, 79, 179, 173))
 
     val options = Seq(
