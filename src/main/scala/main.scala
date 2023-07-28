@@ -23,7 +23,7 @@ def main(): Unit = {
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
 
-  //  modules.Wires(interactions, edgework).solve()
+//  modules.ComplicatedWires(interactions, edgework).solve()
 
   val moduleLocations = DetectModules.detect(interactions, dimensions)
   // interactions.screenshotAllModules(moduleLocations, dimensions)
@@ -35,7 +35,7 @@ def main(): Unit = {
     })
     .filter(socket =>
       if socket.module == null then {
-        println("do not know how to solve " + socket.name);
+        println("do not know how to solve " + socket.name)
         false
       }
       else true

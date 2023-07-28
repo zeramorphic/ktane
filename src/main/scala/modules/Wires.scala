@@ -5,11 +5,6 @@ import org.opencv.core.Point
 import org.opencv.imgproc.Imgproc
 
 class Wires(interactions: Interactions, edgework: Edgework) extends OneshotModule:
-  /**
-   * Increase priority since this module can fail if the edgework read is bad.
-   */
-  override def priority: Int = 20
-
   override def solve(): Unit = {
     enum WireColour:
       case White

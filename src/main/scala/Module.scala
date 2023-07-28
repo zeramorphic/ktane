@@ -42,6 +42,7 @@ object Module:
    */
   def fromName(name: String, interactions: Interactions, edgework: Edgework): Module = {
     name match {
+      case "complicated_wires" => ComplicatedWires(interactions, edgework)
       case "keypad" => Keypad(interactions)
       case "maze" => Maze(interactions)
       case "memory" => Memory(interactions)
