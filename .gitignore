@@ -38,6 +38,5 @@ build/
 .DS_Store
 
 ### Test files ###
-*.bmp
-*.png
+/test/
 /logs/
