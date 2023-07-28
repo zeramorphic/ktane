@@ -40,7 +40,6 @@ class Password(interactions: Interactions):
     word match {
       case None => println("could not find word")
       case Some(word) =>
-        println("word was " + word)
         for i <- 0 to 4 do {
           spinners(i).indexOf(word(i)) match {
             case 0 => clickUpArrow(i)

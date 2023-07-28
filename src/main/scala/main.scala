@@ -19,7 +19,7 @@ def main(): Unit = {
 
   // interactions.pickUpBomb()
 
-  //  Keypad(interactions).solve()
+  // Maze(interactions).solve()
 
   val edgework = ReadEdgework.read(interactions)
   println(edgework)
@@ -37,6 +37,11 @@ def main(): Unit = {
         interactions.selectModule(location, dimensions)
         ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "keypad")
         Keypad(interactions).solve()
+        interactions.deselect()
+      case "maze" =>
+        interactions.selectModule(location, dimensions)
+        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), "maze")
+        Maze(interactions).solve()
         interactions.deselect()
       case "memory" =>
         interactions.selectModule(location, dimensions)
