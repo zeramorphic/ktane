@@ -5,6 +5,7 @@ import com.github.kwhat.jnativehook.keyboard.{NativeKeyEvent, NativeKeyListener}
 import org.opencv.core.Core
 
 import java.awt.GraphicsEnvironment
+import java.nio.file.{Files, Paths}
 import java.time.{Duration, Instant}
 
 @main
@@ -23,6 +24,8 @@ def main(): Unit = {
       if nativeEvent.getKeyChar == 'Q' then System.exit(2)
     }
   })
+
+  Files.walk(Paths.get("logs")).filter(path => path.toFile.isFile).forEach(Files.delete)
 
   val interactions = Interactions(GraphicsEnvironment.getLocalGraphicsEnvironment.getScreenDevices()(0))
   val dimensions = BombDimensions(2, 3)
@@ -69,6 +72,9 @@ def main(): Unit = {
       case Some(socket) =>
         // Try to solve this module.
         interactions.selectModule(socket.location, dimensions)
+        var i = 0
+        while Files.exists(Paths.get(s"logs/${socket.name}_$i.png")) do i += 1
+        ImageConversion.writeToFile(interactions.screenshotSelectedModule(), s"logs/${socket.name}_$i")
         socket.module.attemptSolve() match {
           case Some(instant) => socket.checkNext = instant
           case None =>

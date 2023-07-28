@@ -40,3 +40,4 @@ build/
 ### Test files ###
 *.bmp
 *.png
+/logs/

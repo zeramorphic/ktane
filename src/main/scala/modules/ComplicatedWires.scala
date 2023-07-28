@@ -52,6 +52,11 @@ class ComplicatedWires(interactions: Interactions, edgework: Edgework) extends O
       .map(i => Core.minMaxLoc(starsSubmat.submat(Rect(40 * i, 0, 10, 10))).minVal < 100)
       .toList
 
+    println(red)
+    println(blue)
+    println(led)
+    println(star)
+
     for i <- 0 to 5 do {
       val cut = (red(i), blue(i), led(i), star(i)) match {
         case (false, false, false, false) |
